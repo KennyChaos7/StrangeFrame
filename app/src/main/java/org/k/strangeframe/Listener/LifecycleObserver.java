@@ -8,7 +8,7 @@
  */
 
 package org.k.strangeframe.Listener;
-
+import android.arch.lifecycle.Lifecycle;
 import android.support.annotation.NonNull;
 
 /**
