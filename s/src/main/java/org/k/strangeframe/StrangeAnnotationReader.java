@@ -1,17 +1,15 @@
 package org.k.strangeframe;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.view.View;
 
 import org.k.strangeframe.Annotation.Event;
+import org.k.strangeframe.Annotation.V;
 import org.k.strangeframe.Model.StrangeViewHolder;
 
-import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.HashMap;
 
 /**
@@ -39,42 +37,56 @@ public final class StrangeAnnotationReader {
      */
     private HashMap<String,StrangeViewHolder> mHolderHashMap = new HashMap<>();
 
-
     /**
      * 注解控件对象
-     * @param o
-     * @param viewHolder
-     */
-    static void injectView(final Object o, StrangeViewHolder viewHolder)
-    {
-        try{
-            Class<?> clazz = o.getClass();
-
-        }catch (Throwable e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * 注解添加方法
      *
      * @param o
      * @param viewHolder
      */
-    static void addMethod(final Object o, StrangeViewHolder viewHolder) {
+    static void inject(final Object o, StrangeViewHolder viewHolder) {
 
         try {
+
+            if (viewHolder == null)
+                return;
+
             /**
              * 处理注解
              */
             Class<?> clazz = o.getClass();
+
+            /**
+             * 注解V
+             */
+            for (Field field : clazz.getDeclaredFields())
+            {
+                if (field.getType().isArray() || field.getType().isPrimitive())
+                    continue;
+                V v = clazz.getAnnotation(V.class);
+                if (v == null)
+                    continue;
+                else {
+                    View mView = viewHolder.findViewById(v.id());
+                    if (mView == null)
+                        continue;
+                    else {
+                        field.setAccessible(true);
+                        /**
+                         * field.set(注解对象，注解所代理的对象控件)
+                         */
+                        field.set(o,mView);
+                    }
+                }
+            }
+
+            /**
+             * 注解Event
+             */
             for (Method method : clazz.getDeclaredMethods()) {
-                /**
-                 * 注解Event
-                 */
+
                 Event event = method.getAnnotation(Event.class);
-                if (event == null || viewHolder == null)
+                if (event == null)
                     continue;
                 else {
 
@@ -101,8 +113,7 @@ public final class StrangeAnnotationReader {
                     mView.setOnClickListener(v -> {
                         try {
                             /**
-                             * 根据method的参数要求
-                             * invoke(注解对象，注解所代理的对象的入参)
+                             * 根据method的参数要求invoke(注解对象，注解所代理的对象的入参)
                              * 这里对应的是setOnClickListener(View view),这里的view是指activity或fragment当前的view对象
                              */
                             method.invoke(o,((Activity)o).getCurrentFocus());

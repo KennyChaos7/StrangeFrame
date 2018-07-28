@@ -24,7 +24,6 @@ public final class s {
      */
     private static void _in(Activity activity)
     {
-        StrangeAnnotationReader.injectView(activity,new StrangeViewHolder(activity));
-        StrangeAnnotationReader.addMethod(activity,new StrangeViewHolder(activity));
+        StrangeAnnotationReader.inject(activity,new StrangeViewHolder(activity));
     }
 }
