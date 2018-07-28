@@ -26,4 +26,11 @@ public class StrangeViewHolder{
         if (mActivity != null) return mActivity.findViewById(viewId);
         return null;
     }
+
+    @Override
+    public int hashCode() {
+        if (mView != null) return mView.getId();
+        if (mActivity != null) return Integer.valueOf(mActivity.getClass().getSimpleName());
+        return -1;
+    }
 }

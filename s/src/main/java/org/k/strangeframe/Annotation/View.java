@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Created by Kenny on 18-7-26.
  */
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface View {
 
@@ -16,5 +16,5 @@ public @interface View {
      * view id
      * @return
      */
-    int[] id();
+    int id();
 }

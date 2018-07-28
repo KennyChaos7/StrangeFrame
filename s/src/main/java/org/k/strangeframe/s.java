@@ -13,7 +13,7 @@ public final class s {
      * s框架统一对外接口
      * @param activity
      */
-    static void IN(Activity activity)
+    public static void IN(Activity activity)
     {
         _in(activity);
     }
@@ -24,6 +24,7 @@ public final class s {
      */
     private static void _in(Activity activity)
     {
-        StrangeAnnotationReader.addMethod(activity.getClass(),new StrangeViewHolder(activity));
+        StrangeAnnotationReader.injectView(activity,new StrangeViewHolder(activity));
+        StrangeAnnotationReader.addMethod(activity,new StrangeViewHolder(activity));
     }
 }
