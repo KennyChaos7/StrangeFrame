@@ -22,16 +22,16 @@ public class LifecycleRegistry extends Lifecycle {
     public void addObserver(LifecycleObserver observer) {
         if (!mLifecycleObserverList.containsKey(observer))
         {
-            mLifecycleObserverList.put(observer);
+//            mLifecycleObserverList.put(observer);
         }
     }
 
     @Override
     public void removeObserver(LifecycleObserver observer) {
-        if (mLifecycleObserverList.size() > 0 && mLifecycleObserverList.contains(observer))
-        {
-            mLifecycleObserverList.remove(observer);
-        }
+//        if (mLifecycleObserverList.size() > 0 && mLifecycleObserverList.contains(observer))
+//        {
+//            mLifecycleObserverList.remove(observer);
+//        }
     }
 
     @Override

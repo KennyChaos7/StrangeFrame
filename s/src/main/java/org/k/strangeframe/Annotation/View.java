@@ -1,0 +1,20 @@
+package org.k.strangeframe.Annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Created by Kenny on 18-7-26.
+ */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface View {
+
+    /**
+     * view id
+     * @return
+     */
+    int[] id();
+}

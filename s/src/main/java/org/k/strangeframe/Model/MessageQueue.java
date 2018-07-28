@@ -139,6 +139,7 @@ public class MessageQueue<T> implements Queue<T> {
         rear = 0;
     }
 
+    @SuppressWarnings("uncheck")
     private void ensureCapacity(int capacity) {
 
         if (capacity < size)

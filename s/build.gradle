@@ -1,9 +1,10 @@
-apply plugin: 'com.android.application'
+//apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "org.k.strangeframe"
+//        applicationId "org.k.strangeframe"
         minSdkVersion 22
         targetSdkVersion 27
         versionCode 1
