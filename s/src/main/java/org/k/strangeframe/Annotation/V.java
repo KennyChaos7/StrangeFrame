@@ -16,5 +16,5 @@ public @interface V {
      * view id
      * @return
      */
-    int id();
+    int value();
 }

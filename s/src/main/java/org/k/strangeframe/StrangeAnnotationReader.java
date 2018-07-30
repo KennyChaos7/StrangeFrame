@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by Kenny on 18-7-26.
@@ -37,6 +38,19 @@ public final class StrangeAnnotationReader {
      */
     private HashMap<String,StrangeViewHolder> mHolderHashMap = new HashMap<>();
 
+    private static final HashSet<Class<?>> DONINJECT = new HashSet<>();
+    
+    static {
+        DONINJECT.add(Object.class);
+        DONINJECT.add(Activity.class);
+        DONINJECT.add(android.app.Fragment.class);
+        try {
+            DONINJECT.add(Class.forName("android.support.v4.app.Fragment"));
+            DONINJECT.add(Class.forName("android.support.v4.app.FragmentActivity"));
+        } catch (Throwable ignored) {
+        }
+    }
+    
     /**
      * 注解控件对象
      * 注解添加方法
@@ -47,6 +61,13 @@ public final class StrangeAnnotationReader {
     static void inject(final Object o, StrangeViewHolder viewHolder) {
 
         try {
+            if (o == null || DONINJECT.contains(o))
+                return;
+
+            /**
+             * 递归将父类也进行注解
+             */
+            inject(o.getClass().getSuperclass(),viewHolder);
 
             if (viewHolder == null)
                 return;
@@ -59,15 +80,18 @@ public final class StrangeAnnotationReader {
             /**
              * 注解V
              */
-            for (Field field : clazz.getDeclaredFields())
+            Field[] fields = clazz.getDeclaredFields();
+            if (fields == null || fields.length <= 0)
+                return;
+            for (Field field : fields)
             {
-                if (field.getType().isArray() || field.getType().isPrimitive())
-                    continue;
-                V v = clazz.getAnnotation(V.class);
+//                if (field.getType().isArray() || field.getType().isPrimitive())
+//                    continue;
+                V v = field.getAnnotation(V.class);
                 if (v == null)
                     continue;
                 else {
-                    View mView = viewHolder.findViewById(v.id());
+                    View mView = viewHolder.findViewById(v.value());
                     if (mView == null)
                         continue;
                     else {
