@@ -38,6 +38,9 @@ public final class StrangeAnnotationReader {
      */
     private HashMap<String,StrangeViewHolder> mHolderHashMap = new HashMap<>();
 
+    /**
+     * 无需递归检测注解的类的列表
+     */
     private static final HashSet<Class<?>> DONINJECT = new HashSet<>();
     
     static {
