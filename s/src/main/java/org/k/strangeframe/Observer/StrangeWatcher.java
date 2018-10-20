@@ -4,7 +4,6 @@ package org.k.strangeframe.Observer;
 import org.k.strangeframe.Listener.StrangeListener;
 import org.k.strangeframe.S_STATE;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
@@ -19,10 +18,10 @@ public class StrangeWatcher {
 
     private List<StrangeListener> mListenerArrayList = Collections.synchronizedList(new Vector<StrangeListener>());
 
-    public int registerListener(StrangeListener listener)
+    public S_STATE registerListener(StrangeListener listener)
     {
         if (listener == null)
-            return S_STATE.Failed;
+            return S_STATE.RegisterFailed;
 
         for (StrangeListener strangeListener : mListenerArrayList)
         {
@@ -34,21 +33,22 @@ public class StrangeWatcher {
                     return S_STATE.RegisterSuccess;
             }
         }
-        return S_STATE.Failed;
+        return S_STATE.RegisterFailed;
     }
 
-    public int unregisterListener(StrangeListener listener)
+    public S_STATE unregisterListener(StrangeListener listener)
     {
-        return mListenerArrayList.remove(listener) ? S_STATE.UnregisterSuccess : S_STATE.Failed;
+        return mListenerArrayList.remove(listener) ? S_STATE.UnregisterSuccess : S_STATE.RegisterFailed;
     }
 
     private synchronized void reflex(Object type,Object... arg)
     {
 
     }
-}
 
-enum M_Type
-{
-    ONCREATED,ONDESTORY
+
+    enum M_Type
+    {
+        ONCREATED,ONDESTORY
+    }
 }
