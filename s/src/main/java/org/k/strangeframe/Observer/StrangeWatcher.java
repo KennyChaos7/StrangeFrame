@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-/**
+/*
  * Created by Kenny on 18-7-30.
  * 管理所有观察者Observer
  * 负责将所有的Activity和Fragment对应的观察者Observer

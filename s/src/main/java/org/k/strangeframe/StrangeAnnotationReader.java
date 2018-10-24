@@ -16,7 +16,7 @@ import java.util.HashSet;
 /**
  * Created by Kenny on 18-7-26.
  */
-public final class StrangeAnnotationReader {
+final class StrangeAnnotationReader {
 
     /**
      * 注解类
@@ -36,13 +36,13 @@ public final class StrangeAnnotationReader {
      * 保存已经注解过的viewHolder
      * 利用hashCode进行对比区分是否是不同的activity或者fragment
      */
-    private HashMap<String,StrangeViewHolder> mHolderHashMap = new HashMap<>();
+    private static HashMap<String, StrangeViewHolder> mHolderHashMap = new HashMap<>();
 
     /**
      * 无需递归检测注解的类的列表
      */
     private static final HashSet<Class<?>> DONINJECT = new HashSet<>();
-    
+
     static {
         DONINJECT.add(Object.class);
         DONINJECT.add(Activity.class);
@@ -53,7 +53,7 @@ public final class StrangeAnnotationReader {
         } catch (Throwable ignored) {
         }
     }
-    
+
     /**
      * 注解控件对象
      * 注解添加方法
@@ -66,28 +66,31 @@ public final class StrangeAnnotationReader {
         try {
             if (o == null || DONINJECT.contains(o))
                 return;
-
-            /**
+            String key = o.getClass().getSimpleName().toLowerCase();
+            if (mHolderHashMap.get(key) == null)
+                mHolderHashMap.put(o.getClass().getSimpleName().toLowerCase(), viewHolder);
+            else
+                return;
+            /*
              * 递归将父类也进行注解
              */
-            inject(o.getClass().getSuperclass(),viewHolder);
+            inject(o.getClass().getSuperclass(), viewHolder);
 
             if (viewHolder == null)
                 return;
 
-            /**
+            /*
              * 处理注解
              */
             Class<?> clazz = o.getClass();
 
-            /**
+            /*
              * 注解V
              */
             Field[] fields = clazz.getDeclaredFields();
             if (fields == null || fields.length <= 0)
                 return;
-            for (Field field : fields)
-            {
+            for (Field field : fields) {
 //                if (field.getType().isArray() || field.getType().isPrimitive())
 //                    continue;
                 V v = field.getAnnotation(V.class);
@@ -102,12 +105,12 @@ public final class StrangeAnnotationReader {
                         /**
                          * field.set(注解对象，注解所代理的对象控件)
                          */
-                        field.set(o,mView);
+                        field.set(o, mView);
                     }
                 }
             }
 
-            /**
+            /*
              * 注解Event
              */
             for (Method method : clazz.getDeclaredMethods()) {
@@ -139,11 +142,11 @@ public final class StrangeAnnotationReader {
                         return;
                     mView.setOnClickListener(v -> {
                         try {
-                            /**
+                            /*
                              * 根据method的参数要求invoke(注解对象，注解所代理的对象的入参)
                              * 这里对应的是setOnClickListener(View view),这里的view是指activity或fragment当前的view对象
                              */
-                            method.invoke(o,((Activity)o).getCurrentFocus());
+                            method.invoke(o, ((Activity) o).getCurrentFocus());
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }
@@ -154,6 +157,16 @@ public final class StrangeAnnotationReader {
         } catch (Throwable e) {
             e.printStackTrace();
         }
+    }
+
+    /*
+     *
+     */
+    static void uninject(final Object o)
+    {
+        String key = o.getClass().getSimpleName().toLowerCase();
+        if (mHolderHashMap.get(key) != null)
+            mHolderHashMap.remove(key);
     }
 
     // TODO 利用java的反射reflect包中Proxy去实例化一个listener对象并存储起来

@@ -15,9 +15,12 @@ public class StrangeViewHolder{
         mView = view;
     }
 
-    public StrangeViewHolder(Activity activity)
+    public StrangeViewHolder(Object o)
     {
-        mActivity = activity;
+        if (o instanceof Activity)
+            mActivity = (Activity) o;
+        else if (o instanceof View)
+            mView = (View)o;
     }
 
     public View findViewById(int viewId)

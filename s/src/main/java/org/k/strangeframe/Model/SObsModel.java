@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 
-/**
+/*
  * Created by Kenny on 18-8-1.
  * 所有实现了这个类的Activity或Fragment对象的生命周期都应该会传递到这个Model类里
  */

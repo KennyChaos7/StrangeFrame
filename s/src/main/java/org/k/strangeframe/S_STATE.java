@@ -1,11 +1,11 @@
 package org.k.strangeframe;
 
-/**
+/*
  * Created by Kenny on 18-8-1.
  */
 public enum  S_STATE {
 
-    /**
+    /*
      * Listener监听
      */
     RegisterFailed,
