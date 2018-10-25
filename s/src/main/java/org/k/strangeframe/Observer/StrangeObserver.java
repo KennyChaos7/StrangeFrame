@@ -5,5 +5,8 @@ package org.k.strangeframe.Observer;
  */
 public interface StrangeObserver<T> {
 
-    void onStateChanged(T t);
+    void onDataUpdate(T t);
+
+    @Override
+    int hashCode();
 }

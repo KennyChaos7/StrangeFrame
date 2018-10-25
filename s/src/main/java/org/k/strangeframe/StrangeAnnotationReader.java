@@ -160,7 +160,7 @@ final class StrangeAnnotationReader {
     }
 
     /*
-     *
+     * 删除注解
      */
     static void uninject(final Object o)
     {

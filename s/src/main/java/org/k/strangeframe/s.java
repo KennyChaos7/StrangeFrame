@@ -31,7 +31,7 @@ public final class s {
         String mRegisterActivityName = activity.getLocalClassName();
         if (!mHadRegisterActivitiesNames.contains(mRegisterActivityName)) {
             mHadRegisterActivitiesNames.add(mRegisterActivityName);
-            /**
+            /*
              * 注册观察者
              */
 
