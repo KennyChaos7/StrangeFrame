@@ -1,1 +1,1 @@
-include ':s', ':sample'
+include ':SBase', ':sample'

@@ -7,9 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import org.k.strangeframe.Annotation.Event;
-import org.k.strangeframe.Annotation.V;
-import org.k.strangeframe.s;
+import org.k.SBase.Annotation.Event;
+import org.k.SBase.Annotation.V;
+import org.k.SBase.S;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        s.IN(this);
+        S.IN(this);
 
 //        mButtonToTestSListener = findViewById(R.id.btn_test_s_listener);
     }
