@@ -15,8 +15,6 @@ public final class S {
      */
     private HashSet<String> mHadRegisterActivitiesNames = new HashSet<>();
 
-
-
     /**
      * s框架统一对外接口
      * @param activity
@@ -26,16 +24,12 @@ public final class S {
         _in(activity);
     }
 
-    public void registerListener(Activity activity)
+    public void registerListener(int type, SObserverListener listener)
     {
-        String mRegisterActivityName = activity.getLocalClassName();
-        if (!mHadRegisterActivitiesNames.contains(mRegisterActivityName)) {
-            mHadRegisterActivitiesNames.add(mRegisterActivityName);
-            /*
-             * 注册观察者
-             */
-
-        }
+        /*
+         * 注册观察者
+         */
+        SObserverWatcher.getInstance().registerListener(type,listener);
     }
 
     /**

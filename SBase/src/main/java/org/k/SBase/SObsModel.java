@@ -1,7 +1,6 @@
-package org.k.SBase.Model;
+package org.k.SBase;
 
 import org.k.SBase.Observer.BaseObserver;
-import org.k.SBase.S_STATE;
 
 /*
  * Created by Kenny on 18-8-1.

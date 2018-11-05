@@ -49,7 +49,7 @@ public class MessageQueue<T> implements Queue<T> {
         if (t == null)
             throw new NullPointerException("this data is null");
 
-        /**
+        /*
          * 扩容
          */
         if (size >= max_size)

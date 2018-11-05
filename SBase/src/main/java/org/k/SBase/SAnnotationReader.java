@@ -42,7 +42,6 @@ final class SAnnotationReader {
      * 无需递归检测注解的类的列表
      */
     private static final HashSet<Class<?>> DONINJECT = new HashSet<>();
-
     static {
         DONINJECT.add(Object.class);
         DONINJECT.add(Activity.class);
