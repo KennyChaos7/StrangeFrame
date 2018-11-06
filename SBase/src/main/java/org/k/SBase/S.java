@@ -2,8 +2,6 @@ package org.k.SBase;
 
 import android.app.Activity;
 
-import org.k.SBase.Model.BaseViewHolder;
-
 import java.util.HashSet;
 
 /**
@@ -21,24 +19,9 @@ public final class S {
      */
     public static void IN(Activity activity)
     {
-        _in(activity);
-    }
-
-    public void registerListener(int type, SObserverListener listener)
-    {
-        /*
-         * 注册观察者
-         */
-        SObserverWatcher.getInstance().registerListener(type,listener);
-    }
-
-    /**
-     *
-     * @param activity
-     */
-    private static void _in(Activity activity)
-    {
-        SAnnotationReader.inject(activity,new BaseViewHolder(activity));
+        if (activity != null) {
+//            SAnnotationReader.inject(activity, new BaseViewHolder(activity));
+        }
     }
 
 

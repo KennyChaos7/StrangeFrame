@@ -7,7 +7,8 @@ package org.k.SBase.Listener;
 public interface BaseListener<T> {
 
     /**
+     * @param topic
      * @param t
      */
-    void update(T t);
+    void onListen(int topic, T t);
 }

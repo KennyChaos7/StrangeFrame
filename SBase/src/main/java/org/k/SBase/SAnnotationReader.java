@@ -60,6 +60,7 @@ final class SAnnotationReader {
      * @param o
      * @param viewHolder
      */
+    //TODO 保存viewHolder, 然后每次进行比对
     static void inject(final Object o, BaseViewHolder viewHolder) {
 
         try {
