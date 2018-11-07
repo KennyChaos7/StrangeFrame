@@ -2,6 +2,8 @@ package org.k.SBase;
 
 import android.app.Activity;
 
+import org.k.SBase.Model.BaseViewHolder;
+
 import java.util.HashSet;
 
 /**
@@ -20,7 +22,7 @@ public final class S {
     public static void IN(Activity activity)
     {
         if (activity != null) {
-//            SAnnotationReader.inject(activity, new BaseViewHolder(activity));
+            SAnnotationReader.inject(activity, new BaseViewHolder(activity));
         }
     }
 

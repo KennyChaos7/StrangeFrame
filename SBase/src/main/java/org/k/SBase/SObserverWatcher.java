@@ -53,7 +53,7 @@ public class SObserverWatcher {
      * 注册观察者
      */
     public int registerListener(int topic, SObserverListener listener) {
-        SListenerModel sListenerModel = new SListenerModel(topic,listener);
+        SListenerModel sListenerModel = new SListenerModel(topic, listener);
         if (!mListenerList.contains(sListenerModel)) {
             mListenerList.add(sListenerModel);
             return 0;
@@ -65,7 +65,7 @@ public class SObserverWatcher {
     }
 
     public int unregisterListener(int topic, SObserverListener listener) {
-        SListenerModel sListenerModel = new SListenerModel(topic,listener);
+        SListenerModel sListenerModel = new SListenerModel(topic, listener);
         if (mListenerList.contains(sListenerModel)) {
             mListenerList.remove(sListenerModel);
             return 0;
@@ -123,8 +123,8 @@ public class SObserverWatcher {
     private class SListenerModel {
         private int topic;
         private BaseListener mBaseListener;
-        SListenerModel(int topic, BaseListener listener)
-        {
+
+        SListenerModel(int topic, BaseListener listener) {
             this.topic = topic;
             this.mBaseListener = listener;
         }

@@ -10,6 +10,7 @@ import org.k.SBase.Model.BaseViewHolder;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -120,37 +121,39 @@ final class SAnnotationReader {
                     continue;
                 else {
 
-                    /*
+                    View mView = viewHolder.findViewById(event.id());
+                    if (mView == null)
+                        return;
+
                     Class<?> listenerClass = event.clazz();
 
                     // TODO 设置对应的listener事件名称
                     String listenerName = "set" + listenerClass.getSimpleName();
                     // TODO 生成对应的listener事件的实例对象
-                    Object listener = ?????
+                    EventInvocationHandler invocationHandler = new EventInvocationHandler(mView,listenerName);
+                    Object listener = Proxy.newProxyInstance(listenerClass.getClassLoader(),new Class[]{listenerClass},invocationHandler);
                     // TODO 利用java的反射reflect包中Proxy去实例化一个listener对象并存储起来
 
 
-                    View mView = viewHolder.findViewById(event.id());
-
                     Method viewHadMethod = mView.getClass().getMethod(listenerName, event.clazz());
                     viewHadMethod.invoke(mView, listener);
-                    */
 
-                    @SuppressWarnings("粗制滥造版")
-                    View mView = viewHolder.findViewById(event.id());
-                    if (mView == null)
-                        return;
-                    mView.setOnClickListener(v -> {
-                        try {
-                            /*
-                             * 根据method的参数要求invoke(注解对象，注解所代理的对象的入参)
-                             * 这里对应的是setOnClickListener(View view),这里的view是指activity或fragment当前的view对象
-                             */
-                            method.invoke(o, ((Activity) o).getCurrentFocus());
-                        } catch (Throwable e) {
-                            e.printStackTrace();
-                        }
-                    });
+
+//                    @SuppressWarnings("粗制滥造版")
+//                    View mView = viewHolder.findViewById(event.id());
+//                    if (mView == null)
+//                        return;
+//                    mView.setOnClickListener(v -> {
+//                        try {
+//                            /*
+//                             * 根据method的参数要求invoke(注解对象，注解所代理的对象的入参)
+//                             * 这里对应的是setOnClickListener(View view),这里的view是指activity或fragment当前的view对象
+//                             */
+//                            method.invoke(o, ((Activity) o).getCurrentFocus());
+//                        } catch (Throwable e) {
+//                            e.printStackTrace();
+//                        }
+//                    });
 
                 } //注解结束
             }
@@ -164,17 +167,30 @@ final class SAnnotationReader {
      */
     static void uninject(final Object o)
     {
-        String key = o.getClass().getSimpleName().toLowerCase();
-        if (mHolderHashMap.get(key) != null)
-            mHolderHashMap.remove(key);
+
     }
 
-    // TODO 利用java的反射reflect包中Proxy去实例化一个listener对象并存储起来
-    class HolderListenerHandler implements InvocationHandler {
+}
+// TODO 利用java的反射reflect包中Proxy去实例化一个listener对象并存储起来
+class EventInvocationHandler implements InvocationHandler {
+    private Object mObject;
+    private String method_name;
 
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            return null;
-        }
+    EventInvocationHandler(Object o, String method_name){
+        this.mObject = o;
+        this.method_name = method_name;
     }
+    /**
+     *
+     * @param proxy 需被动态代理的对象
+     * @param method
+     * @param args
+     * @return
+     * @throws Throwable
+     */
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        return method.invoke(mObject,args);
+    }
+
 }
