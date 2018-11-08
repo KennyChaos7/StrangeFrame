@@ -8,7 +8,6 @@ import org.k.SBase.Annotation.V;
 import org.k.SBase.Model.BaseViewHolder;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
@@ -23,6 +22,7 @@ final class SAnnotationReader {
      * 注解类
      */
     // TODO 还需智能化
+    @Deprecated
     private final static String[] mAnnotationNames = new String[]
             {"Event", "View"};
 
@@ -30,8 +30,11 @@ final class SAnnotationReader {
      * 支持的注解事件Listener类型
      */
     // TODO 还需智能化
+    @Deprecated
     private final static String[] mFinalListenerNames = new String[]
             {"OnClickListener"};
+
+    private static HashMap<String, Object> mListenerInstanceHashMap = new HashMap<>();
 
     /**
      * 保存已经注解过的viewHolder
@@ -43,6 +46,7 @@ final class SAnnotationReader {
      * 无需递归检测注解的类的列表
      */
     private static final HashSet<Class<?>> DONINJECT = new HashSet<>();
+
     static {
         DONINJECT.add(Object.class);
         DONINJECT.add(Activity.class);
@@ -120,25 +124,34 @@ final class SAnnotationReader {
                 if (event == null)
                     continue;
                 else {
+                    method.setAccessible(true);
 
-                    View mView = viewHolder.findViewById(event.id());
-                    if (mView == null)
+                    View v = viewHolder.findViewById(event.id());
+                    if (v == null)
                         return;
 
-                    Class<?> listenerClass = event.clazz();
-
-                    // TODO 设置对应的listener事件名称
+                    Class listenerClass = event.clazz();
                     String listenerName = "set" + listenerClass.getSimpleName();
-                    // TODO 生成对应的listener事件的实例对象
-                    EventInvocationHandler invocationHandler = new EventInvocationHandler(mView,listenerName);
-                    Object listener = Proxy.newProxyInstance(listenerClass.getClassLoader(),new Class[]{listenerClass},invocationHandler);
-                    // TODO 利用java的反射reflect包中Proxy去实例化一个listener对象并存储起来
+                    Object listener = mListenerInstanceHashMap.get(listenerName);
+                    EventInvocationHandler invocationHandler = null;
+                    boolean isAddedMethod = false;
+                    if (listener != null)
+                    {
+                        invocationHandler = (EventInvocationHandler) Proxy.getInvocationHandler(listener);
+                        isAddedMethod = v.equals(invocationHandler.getContext());
+                        if (!isAddedMethod)
+                            invocationHandler.addMethod(listenerName,method);
+                    }
+                    if (!isAddedMethod)
+                    {
+                        invocationHandler = new EventInvocationHandler(o);
+                        invocationHandler.addMethod(listenerName, method);
+                        listener = Proxy.newProxyInstance(listenerClass.getClassLoader(), new Class<?>[]{listenerClass}, invocationHandler);
+                        mListenerInstanceHashMap.put(listenerName,listener);
 
-
-                    Method viewHadMethod = mView.getClass().getMethod(listenerName, event.clazz());
-                    viewHadMethod.invoke(mView, listener);
-
-
+                    }
+                    Method setMethod = v.getClass().getMethod(listenerName, listenerClass);
+                    setMethod.invoke(v, listener);
 //                    @SuppressWarnings("粗制滥造版")
 //                    View mView = viewHolder.findViewById(event.id());
 //                    if (mView == null)
@@ -165,32 +178,8 @@ final class SAnnotationReader {
     /*
      * 删除注解
      */
-    static void uninject(final Object o)
-    {
+    static void uninject(final Object o) {
 
-    }
-
-}
-// TODO 利用java的反射reflect包中Proxy去实例化一个listener对象并存储起来
-class EventInvocationHandler implements InvocationHandler {
-    private Object mObject;
-    private String method_name;
-
-    EventInvocationHandler(Object o, String method_name){
-        this.mObject = o;
-        this.method_name = method_name;
-    }
-    /**
-     *
-     * @param proxy 需被动态代理的对象
-     * @param method
-     * @param args
-     * @return
-     * @throws Throwable
-     */
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        return method.invoke(mObject,args);
     }
 
 }
