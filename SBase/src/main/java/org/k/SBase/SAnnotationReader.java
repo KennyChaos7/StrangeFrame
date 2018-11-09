@@ -1,6 +1,7 @@
 package org.k.SBase;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 
 import org.k.SBase.Annotation.Event;
@@ -107,13 +108,13 @@ final class SAnnotationReader {
                         continue;
                     else {
                         field.setAccessible(true);
-                        /**
+                        /*
                          * field.set(注解对象，注解所代理的对象控件)
                          */
                         field.set(o, mView);
                     }
                 }
-            }
+            } //注解V结束
 
             /*
              * 注解Event
@@ -140,35 +141,22 @@ final class SAnnotationReader {
                         invocationHandler = (EventInvocationHandler) Proxy.getInvocationHandler(listener);
                         isAddedMethod = v.equals(invocationHandler.getContext());
                         if (!isAddedMethod)
-                            invocationHandler.addMethod(listenerName,method);
+                            invocationHandler.addMethod(o.getClass().getSimpleName(),method);
                     }
                     if (!isAddedMethod)
                     {
                         invocationHandler = new EventInvocationHandler(o);
-                        invocationHandler.addMethod(listenerName, method);
+                        invocationHandler.addMethod(o.getClass().getSimpleName(), method);
                         listener = Proxy.newProxyInstance(listenerClass.getClassLoader(), new Class<?>[]{listenerClass}, invocationHandler);
                         mListenerInstanceHashMap.put(listenerName,listener);
 
                     }
+                    Log.i("aa" , o.getClass().getSimpleName());
                     Method setMethod = v.getClass().getMethod(listenerName, listenerClass);
                     setMethod.invoke(v, listener);
-//                    @SuppressWarnings("粗制滥造版")
-//                    View mView = viewHolder.findViewById(event.id());
-//                    if (mView == null)
-//                        return;
-//                    mView.setOnClickListener(v -> {
-//                        try {
-//                            /*
-//                             * 根据method的参数要求invoke(注解对象，注解所代理的对象的入参)
-//                             * 这里对应的是setOnClickListener(View view),这里的view是指activity或fragment当前的view对象
-//                             */
-//                            method.invoke(o, ((Activity) o).getCurrentFocus());
-//                        } catch (Throwable e) {
-//                            e.printStackTrace();
-//                        }
-//                    });
 
-                } //注解结束
+
+                } //注解Event结束
             }
         } catch (Throwable e) {
             e.printStackTrace();
