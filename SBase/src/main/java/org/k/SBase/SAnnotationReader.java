@@ -1,12 +1,13 @@
 package org.k.SBase;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 
 import org.k.SBase.Annotation.Event;
+import org.k.SBase.Annotation.Task;
 import org.k.SBase.Annotation.V;
 import org.k.SBase.Model.BaseViewHolder;
+import org.k.SBase.Tools.LogTool;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -25,7 +26,7 @@ final class SAnnotationReader {
     // TODO 还需智能化
     @Deprecated
     private final static String[] mAnnotationNames = new String[]
-            {"Event", "View"};
+            {"Event", "V"};
 
     /**
      * 支持的注解事件Listener类型
@@ -79,6 +80,7 @@ final class SAnnotationReader {
                 return;
             /*
              * 递归将父类也进行注解
+             * 双亲委托模型
              */
             inject(o.getClass().getSuperclass(), viewHolder);
 
@@ -103,7 +105,7 @@ final class SAnnotationReader {
                 if (v == null)
                     continue;
                 else {
-                    View mView = viewHolder.findViewById(v.value());
+                    android.view.View mView = viewHolder.findViewById(v.value());
                     if (mView == null)
                         continue;
                     else {
@@ -120,43 +122,52 @@ final class SAnnotationReader {
              * 注解Event
              */
             for (Method method : clazz.getDeclaredMethods()) {
-
                 Event event = method.getAnnotation(Event.class);
-                if (event == null)
-                    continue;
-                else {
+                Task task = method.getAnnotation(Task.class);
+                if (event != null){
                     method.setAccessible(true);
-
-                    View v = viewHolder.findViewById(event.id());
-                    if (v == null)
+                    View view = viewHolder.findViewById(event.id());
+                    if (view == null)
                         return;
-
                     Class listenerClass = event.clazz();
                     String listenerName = "set" + listenerClass.getSimpleName();
                     Object listener = mListenerInstanceHashMap.get(listenerName);
-                    EventInvocationHandler invocationHandler = null;
+                    SEventInvocationHandler invocationHandler = null;
                     boolean isAddedMethod = false;
                     if (listener != null)
                     {
-                        invocationHandler = (EventInvocationHandler) Proxy.getInvocationHandler(listener);
-                        isAddedMethod = v.equals(invocationHandler.getContext());
+                        invocationHandler = (SEventInvocationHandler) Proxy.getInvocationHandler(listener);
+                        isAddedMethod = view.equals(invocationHandler.getContext());
                         if (!isAddedMethod)
                             invocationHandler.addMethod(o.getClass().getSimpleName(),method);
                     }
                     if (!isAddedMethod)
                     {
-                        invocationHandler = new EventInvocationHandler(o);
+                        invocationHandler = new SEventInvocationHandler(o);
                         invocationHandler.addMethod(o.getClass().getSimpleName(), method);
                         listener = Proxy.newProxyInstance(listenerClass.getClassLoader(), new Class<?>[]{listenerClass}, invocationHandler);
                         mListenerInstanceHashMap.put(listenerName,listener);
 
                     }
-                    Log.i("aa" , o.getClass().getSimpleName());
-                    Method setMethod = v.getClass().getMethod(listenerName, listenerClass);
-                    setMethod.invoke(v, listener);
-
-
+                    LogTool.i(o.getClass().getSimpleName());
+                    Method setMethod = view.getClass().getMethod(listenerName, listenerClass);
+                    setMethod.invoke(view, listener);
                 } //注解Event结束
+
+                /*
+                    注解Task
+                 */
+                else if (task != null)
+                {
+                    method.setAccessible(true);
+                    if (task.type() == Task.TYPE.BACKGROUND)
+                    {
+                        SEventInvocationHandler invocationHandler = new SEventInvocationHandler(o);
+                        invocationHandler.addMethod(o.getClass().getSimpleName(),method);
+                        Object r = Proxy.newProxyInstance(Runnable.class.getClassLoader(),new Class<?>[]{Runnable.class},invocationHandler);
+                        new STaskManager().runInBackground((Runnable) r);
+                    }
+                }
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -169,5 +180,4 @@ final class SAnnotationReader {
     static void uninject(final Object o) {
 
     }
-
 }

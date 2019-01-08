@@ -7,20 +7,20 @@
  * E-mail: kennychaos7@gmail.com
  */
 
-package org.k.SBase.Utils;
+package org.k.SBase.Tools;
 
 /**
  * Created by Kenny on 18-7-14.
  */
-public class TcpUtils {
-    private static TcpUtils sTcpUtils = null;
+public class TcpTool {
+    private static TcpTool sTcpTool = null;
 
-    public TcpUtils getInstance()
+    public TcpTool getInstance()
     {
-        synchronized (TcpUtils.class) {
-            if (sTcpUtils == null)
-                sTcpUtils = new TcpUtils();
-        }   return sTcpUtils;
+        synchronized (TcpTool.class) {
+            if (sTcpTool == null)
+                sTcpTool = new TcpTool();
+        }   return sTcpTool;
     }
 
 }

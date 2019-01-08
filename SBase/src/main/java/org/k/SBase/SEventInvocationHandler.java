@@ -1,6 +1,6 @@
 package org.k.SBase;
 
-import android.util.Log;
+import org.k.SBase.Tools.LogTool;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationHandler;
@@ -9,14 +9,13 @@ import java.util.HashMap;
 
 /**
  * Created by Kenny on 18-11-8.
+ * 利用java的反射reflect包中Proxy去实例化一个listener对象并存储起来
  */
-
-// TODO 利用java的反射reflect包中Proxy去实例化一个listener对象并存储起来
-public class EventInvocationHandler implements InvocationHandler {
+public class SEventInvocationHandler implements InvocationHandler {
     private WeakReference<Object> mContextWeakReference = null;
     private final HashMap<String, Method> mMethodHashMap = new HashMap<>(1);
 
-    EventInvocationHandler(Object context) {
+    SEventInvocationHandler(Object context) {
         this.mContextWeakReference = new WeakReference<>(context);
     }
 
@@ -36,14 +35,8 @@ public class EventInvocationHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object context = mContextWeakReference.get();
         if (context != null) {
-//            String methodName = method.getName();
-//            method = mMethodHashMap.get(methodName);
-//            if (method != null) {
-//                return method.invoke(context, args);
-//            }else
-//                Log.e(getClass().getSimpleName(), "2");
             method = mMethodHashMap.get(context.getClass().getSimpleName());
-            Log.i("bb " ,context.getClass().getSimpleName());
+            LogTool.i(context.getClass().getSimpleName());
             if (method != null)
                 return method.invoke(context,args);
         }

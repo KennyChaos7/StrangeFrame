@@ -8,6 +8,7 @@ import java.util.HashSet;
 
 /**
  * Created by Kenny on 18-7-27.
+ * 启动STaskManager
  */
 public final class S {
     /**

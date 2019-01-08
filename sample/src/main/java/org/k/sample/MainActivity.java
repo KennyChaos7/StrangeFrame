@@ -1,15 +1,15 @@
 package org.k.sample;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.widget.Button;
 
 import org.k.SBase.Annotation.Event;
 import org.k.SBase.Annotation.V;
 import org.k.SBase.S;
+import org.k.SBase.Tools.LogTool;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,16 +20,16 @@ public class MainActivity extends AppCompatActivity {
 
         S.IN(this);
 
-//        mButtonToTestSListener = findViewById(R.id.btn_test_s_listener);
     }
 
     @V(value = R.id.btn_test_s_listener)
     public Button mButtonToTestSListener;
 
-    @Event(id = R.id.btn_test_s_listener)
-    public void c(View v)
+    @Event(id = R.id.btn_test_s_listener,clazz = android.view.View.OnTouchListener.class)
+    public boolean c(android.view.View view, MotionEvent event)
     {
-        Log.i("t","c " + mButtonToTestSListener.getAccessibilityClassName());
+        LogTool.i("c " + mButtonToTestSListener.getAccessibilityClassName());
         startActivity(new Intent(this,SecondActivity.class));
+        return true;
     }
 }

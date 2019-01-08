@@ -1,7 +1,5 @@
 package org.k.SBase.Annotation;
 
-import org.k.SBase.ThreadMode;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,7 +9,7 @@ import java.lang.annotation.Target;
  * Created by Kenny on 18-11-8.
  */
 @Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 public @interface Task {
 
     /*
@@ -23,12 +21,14 @@ public @interface Task {
     /*
         线程模式
      */
-    ThreadMode threadMode();
+    TYPE type() default TYPE.FRONT;
 
     /*
         延迟时间
      */
     long delayTime() default 0;
 
-
+    public enum TYPE{
+        BACKGROUND,FRONT
+    }
 }
