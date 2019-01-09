@@ -18,7 +18,8 @@ import static org.k.SBase.SObserverListener.MSG_TOPIC_Notification;
  * 管理所有观察者Observer
  * 负责将所有的Activity和Fragment对应的观察者Observer
  */
-public class SObserverWatcher {
+@Deprecated //将建新事件监听注解@Register和监听返回注解@Receive
+final class SObserverWatcher {
     private final String TAG = getClass().getSimpleName().toLowerCase();
     /*
         通知类型数组

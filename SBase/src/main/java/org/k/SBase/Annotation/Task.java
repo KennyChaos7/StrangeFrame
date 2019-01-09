@@ -21,7 +21,7 @@ public @interface Task {
     /*
         线程模式
      */
-    TYPE type() default TYPE.FRONT;
+    TYPE type() default TYPE.BACKGROUND;
 
     /*
         延迟时间
@@ -29,6 +29,6 @@ public @interface Task {
     long delayTime() default 0;
 
     public enum TYPE{
-        BACKGROUND,FRONT
+        BACKGROUND, MAIN
     }
 }

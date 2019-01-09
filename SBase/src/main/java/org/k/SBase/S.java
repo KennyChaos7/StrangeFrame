@@ -10,7 +10,7 @@ import java.util.HashSet;
  * Created by Kenny on 18-7-27.
  * 启动STaskManager
  */
-public final class S {
+public class S {
     /**
      * 保存对于已经注册消息通知监听的activity列表
      */
@@ -23,7 +23,7 @@ public final class S {
     public static void IN(Activity activity)
     {
         if (activity != null) {
-            SAnnotationReader.inject(activity, new BaseViewHolder(activity));
+            SFilter.inject(activity, new BaseViewHolder(activity));
         }
     }
 

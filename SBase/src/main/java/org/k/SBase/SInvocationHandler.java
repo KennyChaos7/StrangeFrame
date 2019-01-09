@@ -11,11 +11,11 @@ import java.util.HashMap;
  * Created by Kenny on 18-11-8.
  * 利用java的反射reflect包中Proxy去实例化一个listener对象并存储起来
  */
-public class SEventInvocationHandler implements InvocationHandler {
+final class SInvocationHandler implements InvocationHandler {
     private WeakReference<Object> mContextWeakReference = null;
     private final HashMap<String, Method> mMethodHashMap = new HashMap<>(1);
 
-    SEventInvocationHandler(Object context) {
+    SInvocationHandler(Object context) {
         this.mContextWeakReference = new WeakReference<>(context);
     }
 

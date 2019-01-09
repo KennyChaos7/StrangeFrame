@@ -18,23 +18,21 @@ import java.util.HashSet;
 /**
  * Created by Kenny on 18-7-26.
  */
-final class SAnnotationReader {
+final class SFilter {
 
     /**
      * 注解类
      */
     // TODO 还需智能化
     @Deprecated
-    private final static String[] mAnnotationNames = new String[]
-            {"Event", "V"};
+    private final static String[] mAnnotationNames = new String[]{"Event", "V","Task"};
 
     /**
      * 支持的注解事件Listener类型
      */
     // TODO 还需智能化
     @Deprecated
-    private final static String[] mFinalListenerNames = new String[]
-            {"OnClickListener"};
+    private final static String[] mFinalListenerNames = new String[]{"OnClickListener"};
 
     private static HashMap<String, Object> mListenerInstanceHashMap = new HashMap<>();
 
@@ -49,7 +47,13 @@ final class SAnnotationReader {
      */
     private static final HashSet<Class<?>> DONINJECT = new HashSet<>();
 
+    /**
+     * 线程管理类
+     */
+    private final static STaskManager sTaskManager = new STaskManager();
+
     static {
+        sTaskManager.start();
         DONINJECT.add(Object.class);
         DONINJECT.add(Activity.class);
         DONINJECT.add(android.app.Fragment.class);
@@ -61,13 +65,12 @@ final class SAnnotationReader {
     }
 
     /**
+     * 保存viewHolder, 然后每次进行比对
      * 注解控件对象
      * 注解添加方法
-     *
      * @param o
      * @param viewHolder
      */
-    //TODO 保存viewHolder, 然后每次进行比对
     static void inject(final Object o, BaseViewHolder viewHolder) {
 
         try {
@@ -99,8 +102,6 @@ final class SAnnotationReader {
             if (fields == null || fields.length <= 0)
                 return;
             for (Field field : fields) {
-//                if (field.getType().isArray() || field.getType().isPrimitive())
-//                    continue;
                 V v = field.getAnnotation(V.class);
                 if (v == null)
                     continue;
@@ -132,18 +133,18 @@ final class SAnnotationReader {
                     Class listenerClass = event.clazz();
                     String listenerName = "set" + listenerClass.getSimpleName();
                     Object listener = mListenerInstanceHashMap.get(listenerName);
-                    SEventInvocationHandler invocationHandler = null;
+                    SInvocationHandler invocationHandler = null;
                     boolean isAddedMethod = false;
                     if (listener != null)
                     {
-                        invocationHandler = (SEventInvocationHandler) Proxy.getInvocationHandler(listener);
+                        invocationHandler = (SInvocationHandler) Proxy.getInvocationHandler(listener);
                         isAddedMethod = view.equals(invocationHandler.getContext());
                         if (!isAddedMethod)
                             invocationHandler.addMethod(o.getClass().getSimpleName(),method);
                     }
                     if (!isAddedMethod)
                     {
-                        invocationHandler = new SEventInvocationHandler(o);
+                        invocationHandler = new SInvocationHandler(o);
                         invocationHandler.addMethod(o.getClass().getSimpleName(), method);
                         listener = Proxy.newProxyInstance(listenerClass.getClassLoader(), new Class<?>[]{listenerClass}, invocationHandler);
                         mListenerInstanceHashMap.put(listenerName,listener);
@@ -155,18 +156,16 @@ final class SAnnotationReader {
                 } //注解Event结束
 
                 /*
-                    注解Task
+                 *   注解Task
                  */
                 else if (task != null)
                 {
                     method.setAccessible(true);
-                    if (task.type() == Task.TYPE.BACKGROUND)
-                    {
-                        SEventInvocationHandler invocationHandler = new SEventInvocationHandler(o);
-                        invocationHandler.addMethod(o.getClass().getSimpleName(),method);
-                        Object r = Proxy.newProxyInstance(Runnable.class.getClassLoader(),new Class<?>[]{Runnable.class},invocationHandler);
-                        new STaskManager().runInBackground((Runnable) r);
-                    }
+                    SInvocationHandler invocationHandler = new SInvocationHandler(o);
+                    invocationHandler.addMethod(o.getClass().getSimpleName(),method);
+                    Object r = Proxy.newProxyInstance(Runnable.class.getClassLoader(),new Class<?>[]{Runnable.class},invocationHandler);
+                    Task.TYPE type = task.type();
+                    sTaskManager.post(type,(Runnable) r);
                 }
             }
         } catch (Throwable e) {
@@ -178,6 +177,6 @@ final class SAnnotationReader {
      * 删除注解
      */
     static void uninject(final Object o) {
-
+        sTaskManager.end();
     }
 }
