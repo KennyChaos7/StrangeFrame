@@ -5,7 +5,7 @@
 ## One day will complete this .md
 
 # CN
-## StrangeFram
+## StrangeFrame
   简易android框架（也许有一天会支持成为Java框架）
 ## 依然在龟速写中
 ## 将会将会逐步完善各个文档和注释
