@@ -89,7 +89,6 @@ final class SFilter {
      * @param viewHolder
      */
      void inject(final STaskManager sTaskManager,final Object o, BaseViewHolder viewHolder) {
-
         try {
             if (o == null || DONINJECT.contains(o))
                 return;

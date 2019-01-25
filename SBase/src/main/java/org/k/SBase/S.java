@@ -52,6 +52,7 @@ public class S {
      */
     public static void IN(@NonNull Fragment fragment) {
         //TODO 注解fragment
+        sFilter.inject(sTaskManager,fragment,new BaseViewHolder(fragment));
     }
 
     /**

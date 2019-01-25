@@ -7,7 +7,7 @@ import org.k.SBase.S;
 /**
  * Created by Kenny on 18-12-27.
  */
-public class LogTool {
+public final class LogTool {
     private static final String TAG = "LogTool";
 
     private static String getTAG() {
