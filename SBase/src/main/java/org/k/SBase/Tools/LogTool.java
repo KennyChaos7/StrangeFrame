@@ -2,6 +2,8 @@ package org.k.SBase.Tools;
 
 import android.util.Log;
 
+import org.k.SBase.S;
+
 /**
  * Created by Kenny on 18-12-27.
  */
@@ -31,6 +33,12 @@ public class LogTool {
 
     public static void e(String tag, String content) {
         Log.e(tag, content);
+    }
+
+    public static void ee(String tag,String content){
+        if (S.isDebug){
+            Log.e(tag, content);
+        }
     }
 
     public static void i(String content) {

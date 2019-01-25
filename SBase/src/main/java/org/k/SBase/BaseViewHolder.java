@@ -1,4 +1,4 @@
-package org.k.SBase.Model;
+package org.k.SBase;
 
 import android.app.Activity;
 import android.view.View;

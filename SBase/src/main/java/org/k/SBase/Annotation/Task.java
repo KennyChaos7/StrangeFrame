@@ -1,5 +1,6 @@
 package org.k.SBase.Annotation;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -8,8 +9,9 @@ import java.lang.annotation.Target;
 /**
  * Created by Kenny on 18-11-8.
  */
+@Documented
 @Target(ElementType.METHOD)
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Task {
 
     /*
@@ -29,6 +31,6 @@ public @interface Task {
     long delayTime() default 0;
 
     public enum TYPE{
-        BACKGROUND, MAIN
+        BACKGROUND, MAIN, ASYNC
     }
 }

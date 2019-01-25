@@ -2,11 +2,8 @@ package org.k.SBase;
 
 
 import org.k.SBase.Listener.BaseListener;
-import org.k.SBase.Model.Message;
-import org.k.SBase.Model.MessageQueue;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
@@ -35,7 +32,7 @@ final class SObserverWatcher {
     /*
         消息队列
      */
-    private volatile MessageQueue<Message<HashMap<String, Object>>> mMessageQueue = new MessageQueue<>();
+//    private volatile MessageQueue<Message<HashMap<String, Object>>> mMessageQueue = new MessageQueue<>();
 
     private static SObserverWatcher sWatcher = null;
 
@@ -86,40 +83,40 @@ final class SObserverWatcher {
     /**
      * @param msg 压入队列中
      */
-    public void putMessage(Message<HashMap<String, Object>> msg) {
-        if (msg != null)
-            /*
-                可扩容的添加方式
-             */
-            mMessageQueue.add(msg);
-        else
-            throw new IllegalArgumentException("msg is null");
-    }
+//    public void putMessage(Message<HashMap<String, Object>> msg) {
+//        if (msg != null)
+//            /*
+//                可扩容的添加方式
+//             */
+//            mMessageQueue.add(msg);
+//        else
+//            throw new IllegalArgumentException("msg is null");
+//    }
 
     /**
      * 调用这个方法后, 将自动把队列中消息进行同步更新到各个监听者中
      * 消息和对应的topic会存在一个hashMap中
      * 校验时, 需先确定对应的hashMap存有topic主题参数, 然后再在此hashMap中根据topic主题参数取出对应的消息体
      */
-    public synchronized void Notify() {
-        synchronized (this) {
-            while (!mMessageQueue.isEmpty()) {
-                HashMap<String, Object> msg = mMessageQueue.poll().getData();
-                int msg_topic = msg.get("topic") != null ? (int) msg.get("topic") : -1;
-                if (msg_topic != -1 && msg.get(msg_topic) != null) // 证明此msg存在
-                {
-                    for (SListenerModel listenerModel : mListenerList) {
-                        if (listenerModel.getTopic() == msg_topic) {
-                               /*
-                                    回调
-                                */
-                            listenerModel.getBaseListener().onListen(msg_topic, msg.get(msg_topic));
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    public synchronized void Notify() {
+//        synchronized (this) {
+//            while (!mMessageQueue.isEmpty()) {
+//                HashMap<String, Object> msg = mMessageQueue.poll().getData();
+//                int msg_topic = msg.get("topic") != null ? (int) msg.get("topic") : -1;
+//                if (msg_topic != -1 && msg.get(msg_topic) != null) // 证明此msg存在
+//                {
+//                    for (SListenerModel listenerModel : mListenerList) {
+//                        if (listenerModel.getTopic() == msg_topic) {
+//                               /*
+//                                    回调
+//                                */
+//                            listenerModel.getBaseListener().onListen(msg_topic, msg.get(msg_topic));
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private class SListenerModel {
         private int topic;

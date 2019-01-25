@@ -1,8 +1,8 @@
 package org.k.SBase;
 
 import android.app.Activity;
-
-import org.k.SBase.Model.BaseViewHolder;
+import android.app.Fragment;
+import android.support.annotation.NonNull;
 
 import java.util.HashSet;
 
@@ -10,6 +10,7 @@ import java.util.HashSet;
  * Created by Kenny on 18-7-27.
  * 启动STaskManager
  */
+//TODO 还需修改为MVVM或MVP模式
 public class S {
     /**
      * 保存对于已经注册消息通知监听的activity列表
@@ -17,15 +18,48 @@ public class S {
     private HashSet<String> mHadRegisterActivitiesNames = new HashSet<>();
 
     /**
-     * s框架统一对外接口
-     * @param activity
+     * 注解管理类
      */
-    public static void IN(Activity activity)
-    {
-        if (activity != null) {
-            SFilter.inject(activity, new BaseViewHolder(activity));
-        }
+    private final static SFilter sFilter = SFilter.getInstance();
+    /**
+     * 线程管理类
+     */
+    private final static STaskManager sTaskManager = new STaskManager();
+
+    public static boolean isDebug = false;
+
+    static {
+        sTaskManager.start();
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        sTaskManager.end();
+        super.finalize();
+    }
 
+    /**
+     * 注解
+     * @param activity
+     */
+    public static void IN(@NonNull Activity activity) {
+        sFilter.inject(sTaskManager,activity, new BaseViewHolder(activity));
+    }
+
+    /**
+     *
+     * @param fragment
+     */
+    public static void IN(@NonNull Fragment fragment) {
+        //TODO 注解fragment
+    }
+
+    /**
+     * 发送事件
+     * @param topic 事件主题
+     * @param content 发送内容
+     */
+    public static void sendTo(@NonNull Object topic ,@NonNull Object content){
+        sTaskManager.sendTo(topic, content);
+    }
 }

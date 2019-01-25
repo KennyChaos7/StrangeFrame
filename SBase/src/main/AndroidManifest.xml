@@ -5,5 +5,4 @@
         android:allowBackup="true"
         android:supportsRtl="true"/>
 
-    <uses-permission android:name="android.permission.GET_TASKS"/>
 </manifest>

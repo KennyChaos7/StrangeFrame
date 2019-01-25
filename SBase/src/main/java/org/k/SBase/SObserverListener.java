@@ -5,7 +5,8 @@ import org.k.SBase.Listener.BaseListener;
 /**
  * Created by Kenny on 18-11-5.
  */
-public interface SObserverListener extends BaseListener<Object> {
+@Deprecated
+public interface SObserverListener extends BaseListener<String,Object> {
 
     /*
         更新数据
