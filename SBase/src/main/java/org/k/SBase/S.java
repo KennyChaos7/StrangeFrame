@@ -1,10 +1,9 @@
 package org.k.SBase;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
-
-import java.util.HashSet;
 
 /**
  * Created by Kenny on 18-7-27.
@@ -12,11 +11,6 @@ import java.util.HashSet;
  */
 //TODO 还需修改为MVVM或MVP模式
 public class S {
-    /**
-     * 保存对于已经注册消息通知监听的activity列表
-     */
-    private HashSet<String> mHadRegisterActivitiesNames = new HashSet<>();
-
     /**
      * 注解管理类
      */
@@ -39,6 +33,23 @@ public class S {
     }
 
     /**
+     * 错误捕捉机制
+     * @param application
+     */
+    public static void setIsCatchException(@NonNull Application application){
+        SCat.getInstance(application,false,false);
+    }
+
+    /**
+     *
+     * @param application
+     * @param isCatchAndClose
+     */
+    public static void setIsCatchException(@NonNull Application application, boolean isCatchAndClose,boolean isSaveErrorInfo){
+        SCat.getInstance(application,isCatchAndClose,isSaveErrorInfo);
+    }
+
+    /**
      * 注解
      * @param activity
      */
@@ -51,7 +62,7 @@ public class S {
      * @param fragment
      */
     public static void IN(@NonNull Fragment fragment) {
-        //TODO 注解fragment
+        //TODO 注解fragment,待测
         sFilter.inject(sTaskManager,fragment,new BaseViewHolder(fragment));
     }
 

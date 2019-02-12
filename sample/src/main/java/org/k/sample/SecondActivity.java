@@ -20,7 +20,6 @@ import org.k.SBase.Tools.LogTool;
  */
 @Register()
 public class SecondActivity extends AppCompatActivity implements BaseListener<String,Object> {
-    private S s = null;
 
     @V(value = R.id.btn_test_s_listener_s)
     Button mButtonForTestSListener;
@@ -37,12 +36,17 @@ public class SecondActivity extends AppCompatActivity implements BaseListener<St
     @Event(id = R.id.btn_send_to)
     public void sendto(View v)
     {
-        s.sendTo("Main",SystemClock.currentThreadTimeMillis());
+        S.sendTo("Main",SystemClock.currentThreadTimeMillis());
     }
 
     @Task(type = Task.TYPE.BACKGROUND)
     public void a() {
         LogTool.e(getClass().getSimpleName(),"Task.TYPE.BACKGROUND");
+    }
+
+    @Event(id = R.id.btn_throw_exception)
+    public void throwException(View view){
+        throw new NullPointerException();
     }
 
     @Override

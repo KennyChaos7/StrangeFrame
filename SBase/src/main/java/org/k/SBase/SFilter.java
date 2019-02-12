@@ -24,19 +24,6 @@ import java.util.HashSet;
 //TODO 还需要处理Fragment和Activity的不同
 final class SFilter {
     private final String TAG = getClass().getSimpleName().toLowerCase();
-    /**
-     * 注解类
-     */
-    // TODO 还需智能化
-    @Deprecated
-    private final static String[] mAnnotationNames = new String[]{"Event", "V","Task"};
-
-    /**
-     * 支持的注解事件Listener类型
-     */
-    // TODO 还需智能化
-    @Deprecated
-    private final static String[] mFinalListenerNames = new String[]{"OnClickListener"};
 
     private HashMap<String, Object> mListenerInstanceHashMap = new HashMap<>();
 

@@ -4,6 +4,7 @@ import org.k.SBase.Tools.LogTool;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
@@ -33,17 +34,22 @@ final class SInvocationHandler implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Object context = mContextWeakReference.get();
-        if (context != null) {
-            method = mMethodHashMap.get(context.getClass().getSimpleName());
-            LogTool.i(context.getClass().getSimpleName());
-            if (method != null)
-                return method.invoke(context,args);
+        try {
+            Object context = mContextWeakReference.get();
+            if (context != null) {
+                method = mMethodHashMap.get(context.getClass().getSimpleName());
+                LogTool.i(context.getClass().getSimpleName());
+                if (method != null)
+                    return method.invoke(context, args);
+            }
+            return null;
+        }catch (InvocationTargetException ex){
+//            throw ex.getCause();
+            return null;
         }
-        return null;
     }
 
-    Object getContext() {
+    protected Object getContext() {
         return mContextWeakReference.get();
     }
 }

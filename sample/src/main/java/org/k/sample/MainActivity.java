@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements BaseListener<Stri
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        S.isDebug = true;
         S.IN(this);
 
     }
