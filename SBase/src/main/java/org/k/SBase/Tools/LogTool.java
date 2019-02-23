@@ -1,14 +1,15 @@
 package org.k.SBase.Tools;
 
-import android.util.Log;
-
-import org.k.SBase.S;
+import org.k.SBase.BuildConfig;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Kenny on 18-12-27.
+ * 还待使用{@link java.util.logging.Formatter}规范一下格式
  */
+@Deprecated
 public final class LogTool {
-    private static final String TAG = "LogTool";
 
     private static String getTAG() {
         StackTraceElement caller = new Throwable().getStackTrace()[2];
@@ -19,33 +20,24 @@ public final class LogTool {
         return tag;
     }
 
-    public static void d(String content) {
-        d(getTAG().equals("") ? TAG : getTAG(), content);
+    private static Logger getLogger(){
+        return Logger.getLogger(BuildConfig.APPLICATION_ID);
     }
 
-    public static void d(String tag, String content) {
-        Log.d(tag, content);
+    public static void d(String content) {
+        getLogger().log(Level.CONFIG,getTAG() + " - " + content);
     }
 
     public static void e(String content) {
-        e(getTAG().equals("") ? TAG : getTAG(), content);
+        getLogger().log(Level.WARNING,getTAG() + " - " + content);
     }
 
-    public static void e(String tag, String content) {
-        Log.e(tag, content);
-    }
-
-    public static void ee(String tag,String content){
-        if (S.isDebug){
-            Log.e(tag, content);
-        }
+    public static void debug(String content){
+        getLogger().log(Level.SEVERE,getTAG() + " - " + content);
     }
 
     public static void i(String content) {
-        i(getTAG().equals("") ? TAG : getTAG(), content);
+        getLogger().log(Level.INFO,getTAG() + " - " + content);
     }
 
-    public static void i(String tag, String content) {
-        Log.i(tag, content);
-    }
 }

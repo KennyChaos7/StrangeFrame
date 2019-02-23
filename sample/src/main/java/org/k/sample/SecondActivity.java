@@ -26,7 +26,7 @@ public class SecondActivity extends AppCompatActivity implements BaseListener<St
 
     @Event(id = R.id.btn_test_s_listener_s)
     public void c(android.view.View view) {
-        LogTool.i(getClass().getSimpleName(),"R.id.btn_test_s_listener_s");
+        LogTool.i("R.id.btn_test_s_listener_s");
         mButtonForTestSListener.setText("c");
     }
 
@@ -41,7 +41,7 @@ public class SecondActivity extends AppCompatActivity implements BaseListener<St
 
     @Task(type = Task.TYPE.BACKGROUND)
     public void a() {
-        LogTool.e(getClass().getSimpleName(),"Task.TYPE.BACKGROUND");
+        LogTool.e("Task.TYPE.BACKGROUND");
     }
 
     @Event(id = R.id.btn_throw_exception)
@@ -58,7 +58,7 @@ public class SecondActivity extends AppCompatActivity implements BaseListener<St
     }
 
     @Override
-    public void onListen(String topic, Object obj) {
-        LogTool.e(getClass().getSimpleName(),String.valueOf(obj));
+    public void onCallback(String topic, Object obj) {
+        LogTool.e(String.valueOf(obj));
     }
 }

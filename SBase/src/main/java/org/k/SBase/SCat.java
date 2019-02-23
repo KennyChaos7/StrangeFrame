@@ -27,7 +27,7 @@ import java.util.List;
  * 将用时间戳作为错误信息文件的保存文件名
  * 最后通过设置{@link #isCatchAndClose}来决定是否捕捉到错误关闭app
  */
-public class SCat implements Thread.UncaughtExceptionHandler, Application.ActivityLifecycleCallbacks{
+public final class SCat implements Thread.UncaughtExceptionHandler, Application.ActivityLifecycleCallbacks{
     private final String TAG = getClass().getSimpleName();
     private boolean isCatchAndClose = false;
     private boolean isSaveErrorInfo = true;
@@ -54,7 +54,7 @@ public class SCat implements Thread.UncaughtExceptionHandler, Application.Activi
     //TODO 捕捉错误
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        LogTool.ee(TAG,String.valueOf(checkPermission()));
+        LogTool.debug(String.valueOf(checkPermission()));
         if (defaultCatchHandler != null && e != null)
             defaultCatchHandler.uncaughtException(t,e);
         else

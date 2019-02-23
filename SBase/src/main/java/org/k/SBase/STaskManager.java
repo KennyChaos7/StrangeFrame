@@ -90,7 +90,7 @@ final class STaskManager {
                 Iterator iterator = targetList.iterator();
                 while (iterator.hasNext()){
                     BaseListener listener = ((BaseListener)iterator.next());
-                    listener.onListen(topic,obj);
+                    listener.onCallback(topic,obj);
                 }
             }
         }

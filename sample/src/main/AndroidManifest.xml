@@ -19,6 +19,7 @@
         </activity>
 
         <activity android:name=".SecondActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".MFragmentActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

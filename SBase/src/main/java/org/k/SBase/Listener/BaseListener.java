@@ -10,5 +10,5 @@ public interface BaseListener<T,E> {
      * @param topic
      * @param e
      */
-    void onListen(T topic, E e);
+    void onCallback(T topic, E e);
 }

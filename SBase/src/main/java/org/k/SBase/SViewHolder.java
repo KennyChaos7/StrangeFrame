@@ -6,16 +6,16 @@ import android.view.View;
 /**
  * Created by Kenny on 18-7-27.
  */
-public class BaseViewHolder {
+public class SViewHolder {
     private View mView = null;
     private Activity mActivity = null;
 
-    public BaseViewHolder(View view)
+    public SViewHolder(View view)
     {
         mView = view;
     }
 
-    public BaseViewHolder(Object o)
+    public SViewHolder(Object o)
     {
         if (o instanceof Activity)
             mActivity = (Activity) o;

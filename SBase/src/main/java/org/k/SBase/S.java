@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
  * 启动STaskManager
  */
 //TODO 还需修改为MVVM或MVP模式
-public class S {
+public final class S {
     /**
      * 注解管理类
      */
@@ -54,7 +54,7 @@ public class S {
      * @param activity
      */
     public static void IN(@NonNull Activity activity) {
-        sFilter.inject(sTaskManager,activity, new BaseViewHolder(activity));
+        sFilter.inject(sTaskManager,activity, new SViewHolder(activity));
     }
 
     /**
@@ -63,7 +63,7 @@ public class S {
      */
     public static void IN(@NonNull Fragment fragment) {
         //TODO 注解fragment,待测
-        sFilter.inject(sTaskManager,fragment,new BaseViewHolder(fragment));
+        sFilter.inject(sTaskManager,fragment,new SViewHolder(fragment));
     }
 
     /**

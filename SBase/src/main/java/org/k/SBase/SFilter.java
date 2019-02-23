@@ -31,7 +31,7 @@ final class SFilter {
      * 保存已经注解过的viewHolder
      * 利用hashCode进行对比区分是否是不同的activity或者fragment
      */
-    private HashMap<String, BaseViewHolder> mHolderHashMap = new HashMap<>();
+    private HashMap<String, SViewHolder> mHolderHashMap = new HashMap<>();
 
     /**
      * 保存已经注解过的activity/fragment
@@ -72,27 +72,27 @@ final class SFilter {
      * 保存viewHolder, 然后每次进行比对
      * 注解控件对象
      * 注解添加方法
-     * @param o Activity 或 Fragment
+     * @param object Activity 或 Fragment
      * @param viewHolder
      */
-     void inject(final STaskManager sTaskManager,final Object o, BaseViewHolder viewHolder) {
+     void inject(final STaskManager sTaskManager,final Object object, SViewHolder viewHolder) {
         try {
-            if (o == null || DONINJECT.contains(o))
+            if (object == null || DONINJECT.contains(object))
                 return;
-            String key = o.getClass().getSimpleName().toLowerCase();
+            String key = object.getClass().getSimpleName().toLowerCase();
             if (mHolderHashMap.get(key) == null)
-                mHolderHashMap.put(o.getClass().getSimpleName().toLowerCase(), viewHolder);
+                mHolderHashMap.put(object.getClass().getSimpleName().toLowerCase(), viewHolder);
             else
                 return;
             /*
              * 递归将父类也进行注解
              * 双亲委托模型
              */
-            inject(sTaskManager,o.getClass().getSuperclass(), viewHolder);
-            inject_view(viewHolder,o);
-            inject_event(viewHolder,o);
-            inject_task(sTaskManager,o);
-            inject_register(sTaskManager,o);
+            inject(sTaskManager,object.getClass().getSuperclass(), viewHolder);
+            inject_view(viewHolder,object);
+            inject_event(viewHolder,object);
+            inject_task(sTaskManager,object);
+            inject_register(sTaskManager,object);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -104,7 +104,7 @@ final class SFilter {
      * @param viewHolder
      * @param targetObject  Activity 或 Fragment
      */
-    private void inject_view(BaseViewHolder viewHolder,Object targetObject) throws IllegalAccessException {
+    private void inject_view(SViewHolder viewHolder, Object targetObject) throws IllegalAccessException {
         if (viewHolder == null)
             return;
         Class<?> clazz = targetObject.getClass();
@@ -133,7 +133,7 @@ final class SFilter {
      * @param viewHolder
      * @param targetObject  Activity 或 Fragment
      */
-    private void inject_event(BaseViewHolder viewHolder,Object targetObject) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private void inject_event(SViewHolder viewHolder, Object targetObject) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class<?> clazz = targetObject.getClass();
         for (Method method : clazz.getDeclaredMethods()) {
             Event event = method.getAnnotation(Event.class);
@@ -205,7 +205,7 @@ final class SFilter {
         //TODO 优化循环
         for (Class anInterface : interfaces) {
             if (anInterface == BaseListener.class) {
-                LogTool.ee(TAG, Arrays.toString(register.Topic()));
+                LogTool.debug(Arrays.toString(register.Topic()));
                 for (String topic : register.Topic()) {
                     /*
                         校验是否在mRegisterTopicHashMap中
